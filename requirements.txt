@@ -1,0 +1,35 @@
+﻿# requirements.txt — «ЧЗ-этикетки-портативный»
+#
+# Назначение файла: точный состав библиотек, входящих в сборку, для установки
+# в обычный Python и для пересборки папки win-embed\libs.
+#
+# ВАЖНО про портативную сборку: устанавливать что-либо НЕ НУЖНО — все
+# библиотеки уже лежат в win-embed\libs, а сам Python — в win-embed.
+# Файл нужен для двух случаев:
+#   1) запуск скриптов системным Python 3.13 (например, для доработки):
+#        pip install -r requirements.txt
+#   2) пересборка библиотек под Windows (x64, Python 3.13):
+#        pip download --no-deps --python-version 313 --platform win_amd64 \
+#            --only-binary :all: -r requirements.txt -d wheels
+#      затем распаковать wheels\*.whl в win-embed\libs (папки PIL, pymupdf,
+#      fitz, zxingcpp), удалить pymupdf\mupdf-devel и PIL\_avif*.pyd.
+#
+# Версии зафиксированы — они проверены вместе в текущей сборке.
+# Pillow обновлять только ПАРНО: .py-файлы PIL и _imaging*.pyd обязаны быть
+# одной версии, иначе ошибка «cannot import name _imaging».
+
+# Общие (все три программы используют PIL: генератор через reportlab,
+# конвертор — для проверки картинок)
+Pillow==13.0.0
+
+# Генератор этикеток из CSV (Generator_datamatrix.py)
+pystrich==0.20
+reportlab==5.1.0
+typing_extensions==4.15.0
+
+# Конвертор PDF-выгрузок (ChZ_Label_Convert.py, ChZ_Label_GUI.py)
+PyMuPDF==1.28.2
+zxing-cpp==3.1.1
+
+# Печать на TSC из CSV (gui_printer_port.py) — внешних зависимостей нет,
+# только стандартная библиотека и tkinter из win-embed.
